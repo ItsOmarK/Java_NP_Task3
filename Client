@@ -1,0 +1,44 @@
+import java.net.*;
+import java.io.*;
+import java.util.*;
+
+
+public class Sender
+{
+   public static void main(String[] args)
+   {
+       try
+       {
+       Scanner sc=new Scanner(System.in);
+       DatagramSocket socket1=new DatagramSocket();
+       DatagramSocket socket2=new DatagramSocket(9090);
+       InetAddress ip=InetAddress.getLocalHost();
+       byte[] receive_buffer=new byte[1024];
+       DatagramPacket packet=null;
+      
+      
+       for(int i=1;i<=10;i++)
+       {
+           System.out.print("\n Enter Number Please: "+i+": ");
+          
+           int n=sc.nextInt();
+           String intAsString=Integer.toString(n);
+           packet=new DatagramPacket(intAsString.getBytes(),intAsString.length(),ip,8080);
+           socket1.send(packet);
+       }
+      
+       DatagramPacket packetR=new DatagramPacket(receive_buffer,1024);
+       socket2.receive(packetR);
+       String received_data=new String(packetR.getData(),0,packetR.getLength()); 
+       System.out.println("Avg : "+Double.parseDouble(received_data));
+      
+       socket1.close();
+       socket2.close();
+      
+       }
+       catch(Exception e)
+       {
+           System.out.println("__ Exception! ");
+       }
+   }
+}
