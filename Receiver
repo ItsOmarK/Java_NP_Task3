@@ -1,0 +1,51 @@
+import java.io.*;
+import java.net.*;
+import java.util.*;
+
+public class Receiver
+{
+   public static void main(String[] args)
+   {
+       try
+       {
+       DatagramSocket socket1 = new DatagramSocket(8080);
+       DatagramSocket socket2 = new DatagramSocket();
+       byte[] buffer=new byte[1024];
+       int total=0;
+       DatagramPacket packet=null;
+       InetAddress ip=InetAddress.getLocalHost();
+      
+      
+       for(int i=1;i<=10;i++)
+       {
+       packet=new DatagramPacket(buffer,1024);
+       socket1.receive(packet);
+       String data=new String(packet.getData(),0,packet.getLength());
+       total=total+Integer.parseInt(data);
+       System.out.println(" Data we got:   "+Integer.parseInt(data));
+      
+      
+       }
+      
+      
+      
+       double average=(double)total/10;
+       String avg=Double.toString(average);
+       packet=new DatagramPacket(avg.getBytes(),avg.length(),ip,9090);
+       socket2.send(packet);
+       System.out.println(" Sending DATA: "+avg);
+      
+      
+      
+       socket1.close();
+       socket2.close();
+      
+       }
+      
+       catch(Exception e)
+       {
+           System.out.println(" ___ Exception! "+e);
+       }
+      
+   }
+}
